@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +23,9 @@ public class FileServiceImpl implements FileServiceAPI {
 
 	@Override
 	public Resource load(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Path file = rootFolder.resolve(name);
+		Resource resource = new UrlResource(file.toUri());
+		return resource;
 	}
 
 	@Override
@@ -35,8 +37,7 @@ public class FileServiceImpl implements FileServiceAPI {
 
 	@Override
 	public Stream<Path> loadAll() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return Files.walk(rootFolder, 1).filter(path -> !path.equals(rootFolder)).map(rootFolder::relativize);
 	}
 
 }
